@@ -76,7 +76,7 @@ const commonConfig: webpack.Configuration = {
   },
   output: {
     path: path.resolve(appDirectory, 'dist'),
-    publicPath: '/',
+    publicPath: '/projects-preview/modal-animations',
     filename: 'eksperience.[contenthash].bundle.js',
     clean: true,
   },
