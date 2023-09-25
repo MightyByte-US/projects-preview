@@ -1,8 +1,0 @@
-[text-mode="fit"] {
-    white-space: pre-wrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    line-break: anywhere;
-    word-break: break-all;
-}
