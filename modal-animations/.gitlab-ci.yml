@@ -1,0 +1,32 @@
+# Before running this pipeline for the first time, make sure to:
+#   1. Generate an SSH key pair: `ssh-keygen -t rsa -b 2048 -C "ci@mightybyte.us"`
+#     1.1. Go to Settings -> Repository -> Deploy Keys and add the public SSH key
+#          with write permissions.
+#     1.2. Go to Settings -> CI/CD -> Variables and add the private key as a variable
+#          called `SSH_PRIVATE_KEY` without any flags selected.
+#   2. Run `ssh-keyscan gitlab.com` and copy the contents of the "gitlab.com ssh-rsa ..." line.
+#     2.1. Go to Settings -> CI/CD -> Variables and add the copied content as a variable called
+#          `CI_KNOWN_HOSTS` without any flags selected.
+#   3. Set the `TARGET_BRANCH` variable below to the name of the branch the new version should
+#      be merged into.
+variables: 
+  TARGET_BRANCH: "staging"
+
+create-release-job:
+  image: node:18
+  stage: build
+  before_script:
+    - mkdir ~/.ssh/
+    - echo "${CI_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+    - echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - git config user.email "ci@mightybyte.us"
+    - git config user.name "CI"
+    - git remote remove ssh_origin || true
+    - git remote add ssh_origin "git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git"
+  script:
+    - npm run createRelease -- $CI_COMMIT_BRANCH
+    - git push ssh_origin HEAD:$CI_COMMIT_BRANCH -o ci.skip -o merge_request.create -o merge_request.remove_source_branch -o merge_request.target=$TARGET_BRANCH
+    - git push ssh_origin --tags -o ci.skip
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^build\/\d+\.\d+\.\d+$/

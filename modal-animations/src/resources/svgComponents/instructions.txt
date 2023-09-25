@@ -1,0 +1,2 @@
+Use this website https://react-svgr.com/playground/?memo=true&native=true&typescript=trueor something similar to convert
+the svg resource to React Native class. You can then use the outputted component as usual.

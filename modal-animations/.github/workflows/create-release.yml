@@ -1,0 +1,43 @@
+# Workflow to create a new release version when pushed to a branch "build/x.y.z".
+
+name: Create release
+
+on:
+  create
+
+# Note: Set TARGET_BRANCH to the correct value 
+env:
+  TARGET_BRANCH: staging
+
+jobs:
+  create-release:
+    if: ${{ startsWith(github.ref_name, 'build/') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          
+      # Commit the version and changelog updates as GitHub's bot
+      - name: Set up git user
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          
+      - name: Update version and changelog
+        run: |
+          npm run createRelease -- ${{ github.ref_name }}
+          git push origin ${{ github.ref_name }} --tags
+
+      - name: Open PR
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ github.ref_name }}
+          destination_branch: ${{ env.TARGET_BRANCH }}
+          pr_title: ${{ github.ref_name }}
+          pr_body: New release (${{ github.ref_name }}).
+          pr_assignee: ${{ github.actor }}
