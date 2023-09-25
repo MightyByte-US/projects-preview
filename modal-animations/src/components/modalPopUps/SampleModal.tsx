@@ -9,16 +9,19 @@ interface SampleModalProps {
   onDismiss: () => void,
   textToShow: string,
   animationIn?: MB_ModalAnimations
-  animationOut?: MB_ModalAnimations
+  animationOut?: MB_ModalAnimations,
+  duration?: number
 }
 
-const SampleModal = ({ isVisible, onDismiss, textToShow, animationIn, animationOut }: SampleModalProps) => {
+const SampleModal = ({ isVisible, onDismiss, textToShow, animationIn, animationOut, duration }: SampleModalProps) => {
   return (
     <MB_Modal
       isVisible={isVisible}
       onDismiss={onDismiss}
       animationIn={animationIn}
       animationOut={animationOut}
+      animationInTiming={duration}
+      animationOutTiming={duration}
     >
       <View style={styles.popupContainer}>
         <Text style={textStyles.largeText}>{textToShow}</Text>

@@ -15,6 +15,12 @@ interface ModalData {
 const Home = () => {
 
   const [modalData, setModalData] = useState<ModalData>({ isVisible: false });
+  const [duration, setDuration] = useState(300);
+
+  const onDurationChange = useCallback((e: any) => {
+    const newDuration = Number(e.nativeEvent.target.value);
+    setDuration(newDuration);
+  }, []);
 
   const showModal = useCallback((event: GestureResponderEvent) => {
     const animationIn = (event.nativeEvent.target as any).innerText;
@@ -31,11 +37,17 @@ const Home = () => {
   return (
     <SafeAreaProvider>
       <Text style={styles.title}>Modal Animations Examples</Text>
+      <View style={styles.duration}>
+        <Text>Duration </Text>
+        <input type="number" value={duration} min={100} onInput={onDurationChange} />
+        <Text> milliseconds</Text>
+      </View>
       <View style={styles.container}>
         <SampleModal
           isVisible={modalData.isVisible}
           animationIn={modalData.animationIn}
           animationOut={modalData.animationOut}
+          duration={duration}
           onDismiss={hideModal}
           textToShow={`This is an example of the animation ${modalData.animationIn?.toString().replace('In', '')}`}
         />
@@ -96,6 +108,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 20,
     marginBottom: 10,
+  },
+  duration: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
     paddingHorizontal: 16,
