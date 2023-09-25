@@ -2,34 +2,16 @@ import 'react-native-gesture-handler';
 
 import React from 'react';
 import { useFontLoader } from './src/utils/fontLoader';
-import { SignedInStatusProvider } from './src/context/SignedInContext';
-import RootNavigation from './src/navigators/RootNavigator';
-import { MB_DialogueContextProvider } from './src/mightyByteLibraries/MB_Dialogue/MB_DialogueContext';
-import { MB_Dialogue } from './src/mightyByteLibraries/MB_Dialogue/MB_Dialogue';
 import { COLORS } from './src/constants/colors';
 import { StyleSheet } from 'react-native';
 import { textStyles } from './src/constants/textStyles';
+import { Home } from './src/components/screens/Home';
 
 
 const App = () => {
   useFontLoader();
 
-  return (
-    <SignedInStatusProvider>
-      <MB_DialogueContextProvider>
-        <RootNavigation />
-
-        <MB_Dialogue
-          defaultContainerStyle={styles.modalPopUpDefaultContainer}
-          defaultTitleStyle={styles.modalPopUpDefaultTitle}
-          defaultMessageStyle={styles.modalPopUpDefaultMessage}
-          defaultPrimaryButtonStyle={styles.modalPopUpDefaultPrimaryButton}
-          defaultSeconaryButtonStyle={styles.modalPopUpDefaultSecondaryButton}
-          defaultButtonsContainerStyleModifier={styles.modalPopUpDefaultButtonsContainerModifier}
-        />
-      </MB_DialogueContextProvider>
-    </SignedInStatusProvider>
-  );
+  return <Home />;
 };
 
 export default App;

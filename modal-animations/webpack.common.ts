@@ -10,6 +10,7 @@ const appDirectory = path.resolve(__dirname);
 // Add every react-native package that needs compiling
 const compileNodeModules = [
   'react-native-animatable',
+  'react-native-reanimated',
   'react-native-vector-icons',
   'react-native-walkthrough-tooltip',
 ].map(moduleName => path.resolve(appDirectory, `node_modules/${moduleName}`));
